@@ -1,0 +1,22 @@
+{% include 'upper_part.html' %}
+{% include 'cart.html' %}
+{% load static %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Цікаві рецепти</h1>
+    <div class="row">
+        {% for video in videos %}
+            <div class="col-md-4 mb-4">
+                <div class="card video-card">
+                    {% if video.thumbnail_url %}
+                        <img src="{{ video.thumbnail_url }}" class="card-img-top" alt="{{ video.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ video.title }}</h5>
+                        <p class="card-text">{{ video.description|truncatechars:100 }}</p>
+                        <a href="{{ video.url }}" class="btn btn-dark bg-gradient">Дивитись відео</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,41 @@
+{% block content %}
+    <div class="container mt-3">
+        <div class="alert alert-success border border-success" role="alert">
+            <h4 class="alert-heading">Успішно додано!</h4>
+            <p>Ваш рецепт був успішно доданий.</p>
+            <hr>
+            <p class="mb-0">Продовжуйте додавати смачні рецепти та ділитися ними з іншими.</p>
+        </div>
+    </div>
+
+    {% include 'upper_part.html' %}
+    {% include 'cart.html' %}
+    {% load static %}
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center mb-4">Рецепти @{{ user.username }}</h2>
+                <div class="row">
+                    {% for recipe in recipes %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                {% if recipe.image %}
+                                    <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ recipe.title }}</h5>
+                                    <p class="card-text">{{ recipe.description|truncatechars:150 }}</p>
+                                    <p class="text-muted"><small>Дата
+                                        публикації: {{ recipe.created_date|date:"d M Y" }}</small></p>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-dark bg-gradient">Детальніше</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

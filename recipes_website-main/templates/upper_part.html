@@ -1,0 +1,104 @@
+{% include 'base.html' %}
+{% load static %}
+{% block content %}
+{% endblock %}
+
+<div class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p class="text-center ">
+                    _______________________________________________________________________________________________________________________________________________________</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-header">
+    <div class="container">
+        <div class="row">
+            <nav class="navbar navbar-expand-lg navbar-custom">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{% url 'home' %}">
+                        <img src="https://assets.materialup.com/uploads/d2feb47f-3d3c-4b05-8673-a2886e5f6aca/preview"
+                             alt="Logo" class="d-inline-block align-text-top">
+                        Recipes
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle custom-nav-link" href="#" id="navbarDropdownMenuLink"
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Рецепти
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    {% if request.user.is_authenticated %}
+                                        <li><a class="dropdown-item" href="{% url 'user_recipes' user.username %}">Мої
+                                            рецепти</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'favorite_recipes' %}">Обрані
+                                            рецепти</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'like_recipes' %}">Вподобані
+                                            Рецепти</a></li>
+                                    {% else %}
+                                        <li><a class="dropdown-item" href="{% url 'login' %}">Мої
+                                            рецепти</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'login' %}">Обрані
+                                            рецепти</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'login' %}">Вподобані
+                                            Рецепти</a></li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active custom-nav-link" href="{% url 'recipe_videos' %}">Відео</a>
+                            </li>
+                            {% if request.user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link active custom-nav-link" href="{% url 'add_recipe' %}">Додати
+                                        Рецепт</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+                            <form class="d-flex search-bar" role="search" action="{% url 'search' %}" method="get">
+                                <input type="hidden" name="context" value="{{ search_context }}">
+                                <input class="form-control me-2" type="search" name="q" placeholder="Пошук"
+                                       aria-label="Search">
+                                <button class="btn btn-dark bg-gradient" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
+
+                        </div>
+                        {% if request.user.is_authenticated %}
+                            <div class="d-flex align-items-center">
+                                {% if request.user.profile_picture %}
+                                    <a href="{% url 'profile' request.user.username %}" class="nav-link">
+                                        <img src="{{ request.user.profile_picture.url }}" alt="Avatar"
+                                             class="user-avatar">
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'profile' request.user.username %}" class="nav-link">
+                                        <img src="{% static 'no_image.png' %}" alt="No Avatar" class="user-avatar">
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'logout' %}" class="btn btn-dark bg-gradient">Вийти</a>
+                            </div>
+                        {% else %}
+                            <div class="text-end">
+                                <a href="{% url 'login' %}" class="btn btn-dark bg-gradient">
+                                    <i class="fas fa-user"></i> Війти
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+

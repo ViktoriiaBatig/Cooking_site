@@ -1,0 +1,99 @@
+{% include 'upper_part.html' %}
+{% include 'cart.html' %}
+{% load static %}
+<div class="row py-5 px-4">
+    <div class="col-md-5 mx-auto">
+        <div class="bg-white shadow rounded overflow-hidden">
+            <div class="px-4 pt-0 pb-4 cover position-relative">
+                <div class="d-flex justify-content-center align-items-start stats-container mb-4"
+                     style="position: absolute; font-size: 200%; left: 250px; height: auto; margin-top: 5%;">
+                    <div class="stats-container-inner">
+                        <div class="stats me-4">
+                            <h6 class="mb-0">Рецептів</h6>
+                            <span>{{ statistic.recipes_count }}</span>
+                        </div>
+                        <div class="social-links"
+                             style="margin-top: 25%;">
+                            {% if user.instagram_url %}
+                                <a href="{{ user.instagram_url }}" target="_blank" title="Instagram"
+                                   class="social-link-text">
+                                    <i class="fab fa-instagram" style="color: #ac2bac;"></i> Instagram
+                                </a>
+                            {% endif %}
+                            {% if user.telegram_url %}
+                                <a href="https://t.me/{{ user.telegram_url }}" target="_blank" title="Telegram"
+                                   class="social-link-text">
+                                    <i class="fab fa-telegram" style="color: #55acee;"></i> Telegram
+                                </a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                    <div class="stats me-4">
+                        <h6 class="mb-0">Вподобань</h6>
+                        <span>{{ statistic.favorites_count }}</span>
+                    </div>
+                    <div class="stats me-4">
+                        <h6 class="mb-0">Обрані</h6>
+                        <span>{{ statistic.likes_count }}</span>
+                    </div>
+                </div>
+                <div class="profile-section d-flex align-items-center">
+                    <div class="avatar mb-3">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="..." class="img-thumbnail rounded-circle">
+                        {% else %}
+                            <img src="{% static 'no_image.png' %}" alt="..." class="img-thumbnail rounded-circle">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="media align-items-end profile-head">
+                    <div class="media-body mb-5 text-black">
+                        <h4 class="mt-0 mb-0">@{{ user.username }}</h4>
+                        {% if request.user.is_authenticated and request.user == user %}
+                            <a href="{% url 'edit_profile' %}" class="btn btn-outline-dark btn-sm mt-2">Змінити
+                                профіль</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            {% if request.user.bio %}
+                <div class="px-4 py-3"><h5 class="mb-2">Про себе</h5>
+                    <div class="p-4 rounded">
+                        <p class="font-italic mb-0">{{ user.bio }}</p>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="recipes-section px-4 py-3">
+                <h5>Опубліковані рецепти</h5>
+                {% if recipes %}
+                    <div class="row">
+                        {% for recipe in recipes|slice:":3" %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card recipe-card">
+                                    {% if recipe.image %}
+                                        <img src="{{ recipe.image.url }}" class="card-img-top recipe-image"
+                                             alt="{{ recipe.title }}">
+                                    {% else %}
+                                        <div class="recipe-profile-image-placeholder">
+                                            <span>Немає зображення</span>
+                                        </div>
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ recipe.title }}</h6>
+                                        <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-dark bg-gradient">Детальніше</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                    <a href="{% url 'user_recipes' user.username %}" class="btn btn-outline-dark">Побачити всі</a>
+                {% else %}
+                    <p>Рецептів немає.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

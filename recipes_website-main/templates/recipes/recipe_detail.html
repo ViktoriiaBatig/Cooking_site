@@ -1,0 +1,186 @@
+{% include 'upper_part.html' %}
+{% include 'cart.html' %}
+{% load static %}
+{% block content %}
+    <div class="container my-5">
+        <div class="recipe-detail bg-white p-5 shadow rounded">
+            <h2 class="display-4 mb-4 text-center">{{ recipe.title }}</h2>
+            {% if recipe.image %}
+                <div class="text-center mb-4">
+                    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="img-fluid rounded shadow-sm"
+                         style="max-height: 400px; object-fit: cover;"/>
+                </div>
+            {% endif %}
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <i class="fas fa-user me-2 text-muted"></i>
+                    <a href="{% url 'profile' recipe.user.username %}" class="text-dark text-decoration-none">
+                        Автор: {{ recipe.user.username }}
+                    </a>
+                </div>
+                <div>
+                    <i class="fas fa-calendar-alt me-2 text-muted"></i>
+                    <span class="text-dark">Дата публикації: {{ recipe.created_date|date:"d M Y" }}</span>
+                </div>
+            </div>
+
+            <div class="recipe-description bg-light p-3 border-left border-primary border-4">
+                <p class="mb-0">{{ recipe.description|linebreaks }}</p>
+            </div>
+
+            {% if recipe.video %}
+                <div class="video-wrapper">
+                    <video controls>
+                        <source src="{{ recipe.video.url }}" type="video/mp4">
+                        Ваш браузер не поддерживает видео тег.
+                    </video>
+                </div>
+            {% endif %}
+
+
+            {% if request.user == recipe.user %}
+                <div class="mt-4 d-flex justify-content-between">
+                    <a href="{% url 'edit_recipe' recipe.id %}" class="btn btn-warning">Редагувати</a>
+                    <a href="{% url 'delete_recipe' recipe.id %}" class="btn btn-danger"
+                       onclick="return confirm('Ви впевнені?');">Видалити</a>
+                </div>
+            {% endif %}
+
+            <hr>
+
+        </div>
+
+        <div class="recipe-actions mt-4">
+            <button id="like-button" data-recipe-id="{{ recipe.id }}" class="btn"
+                    data-liked="{{ is_liked_by_user }}">
+                {% if is_liked_by_user %}
+                    <i class="fas fa-heart" style="color: red;"></i>
+                {% else %}
+                    <i class="far fa-heart"></i>
+                {% endif %}
+            </button>
+            <span id="likes-count">{{ recipe.like_set.count }}</span>
+            <button id="favorite-button" data-recipe-id="{{ recipe.id }}" class="btn"
+                    data-favorited="{{ is_favorited_by_user }}">
+                {% if is_favorited_by_user %}
+                    <i class="fas fa-star" style="color: gold;"></i>
+                {% else %}
+                    <i class="far fa-star"></i>
+                {% endif %}
+            </button>
+            <span id="favorites-count">{{ recipe.favorite_set.count }}</span>
+
+
+            <form action="{% url 'post_comment' recipe.id %}" method="post" class="mb-4">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <textarea name="text" required class="form-control" rows="3"
+                              placeholder="Додайте коментар..."></textarea>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-dark bg-gradient">Коментувати</button>
+                </div>
+            </form>
+
+            <div class="comments mt-3">
+                <table class="table">
+                    <tbody>
+                    {% for comment in recipe.comment_set.all %}
+                        <tr class="comment mb-2">
+                            <td class="align-middle">
+                                {% if comment.user.profile_picture %}
+                                    <img src="{{ comment.user.profile_picture.url }}" alt="Avatar"
+                                         class="rounded-circle"
+                                         style="width: 50px; height: 50px;">
+                                {% else %}
+                                    <img src="{% static 'no_image.png' %}" alt="Avatar" class="rounded-circle"
+                                         style="width: 50px; height: 50px;">
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">
+                                <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
+                                {% if comment.user == request.user %}
+                                    <div><a href="{% url 'delete_comment' comment.id %}" class="text-danger">Удалить</a>
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const likeButton = document.getElementById('like-button');
+            const favoriteButton = document.getElementById('favorite-button');
+            const likesCount = document.getElementById('likes-count');
+            const favoritesCount = document.getElementById('favorites-count');
+
+            console.log('Data Liked:', likeButton.getAttribute('data-liked'));
+            console.log('Data Favorited:', favoriteButton.getAttribute('data-favorited'));
+
+            updateButtonStyles(likeButton, likeButton.getAttribute('data-liked').toLowerCase() === 'true');
+            updateButtonStyles(favoriteButton, favoriteButton.getAttribute('data-favorited').toLowerCase() === 'true');
+
+            function updateButtonStyles(button, isActive) {
+                const icon = button.querySelector('i');
+                icon.classList.remove('fas', 'far', 'fa-heart', 'fa-star', 'liked', 'favorited');
+                if (button.id === 'like-button') {
+                    icon.classList.add(isActive ? 'fas' : 'far', 'fa-heart');
+                    icon.style.color = isActive ? 'red' : '';
+                } else if (button.id === 'favorite-button') {
+                    icon.classList.add(isActive ? 'fas' : 'far', 'fa-star');
+                    icon.style.color = isActive ? 'gold' : '';
+                }
+            }
+
+            likeButton.addEventListener('click', function () {
+                const recipeId = this.getAttribute('data-recipe-id');
+                fetch(`/recipe/${recipeId}/toggle_like/`, {
+                    method: 'POST',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')}
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        likesCount.innerText = data.likes_count;
+                        updateButtonStyles(this, data.liked);
+                    });
+            });
+
+            favoriteButton.addEventListener('click', function () {
+                const recipeId = this.getAttribute('data-recipe-id');
+                fetch(`/recipe/${recipeId}/toggle_favorite/`, {
+                    method: 'POST',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')}
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        favoritesCount.innerText = parseInt(favoritesCount.innerText) + (data.favorited ? 1 : -1);
+                        updateButtonStyles(this, data.favorited);
+                    });
+            });
+
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+
+    </script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% include 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</head>
+<body>
+<section class="py-5">
+    <div class="container">
+        <div class="row d-flex align-items-center justify-content-center">
+            <div style="max-width:420px;">
+                <form action="{% url 'login' %}" class="bg-white border py-4 px-5" method="post">
+                    {% csrf_token %}
+                    <div class="text-center mb-3">
+                        <a href="{% url 'home' %}">
+                            <img src="https://assets.materialup.com/uploads/d2feb47f-3d3c-4b05-8673-a2886e5f6aca/preview"
+
+                                 alt="Logo" width="70"
+                                 class="d-inline-block align-text-top mb-2">
+                        </a>
+                        <p class="text-muted fw-bold mt-2">
+                            Війдіть, щоб підтвердити акаунт.
+                        </p>
+                    </div>
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                    <div class="form-floating mb-3">
+                        {% if form.username.errors %}
+                            <div class="alert alert-danger">{{ form.username.errors }}</div>
+                        {% endif %}
+                        <input type="text" name="username"
+                               class="form-control {% if form.username.errors %}is-invalid{% endif %}" id="username"
+                               placeholder="Username" required>
+                        <label for="username">Логін</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        {% if form.password.errors %}
+                            <div class="alert alert-danger">{{ form.password.errors }}</div>
+                        {% endif %}
+                        <input type="password" name="password"
+                               class="form-control {% if form.password.errors %}is-invalid{% endif %}" id="password"
+                               placeholder="Password" required>
+                        <label for="password">Пароль</label>
+                    </div>
+                    <div class="mb-2">
+                        <button class="btn btn-dark bg-gradient fw-bold w-100 bg-gradient" type="submit">Війти</button>
+                    </div>
+                </form>
+                <div class="bg-white py-4 px-5 text-center border mt-4">
+                    <p class="m-0">
+                        Не маєте акаунту? <a href="{% url 'register' %}">Зареєструватися</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

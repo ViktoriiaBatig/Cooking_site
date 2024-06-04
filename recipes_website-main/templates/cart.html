@@ -1,0 +1,99 @@
+{% load static %}
+<div class="container">
+    <div id="noteContainer">
+        <button id="showNoteInput" class="floating-button"><img src="{% static 'cart.png' %}" alt="Cart"
+                                                                style="width: 80px;"></button>
+        <div id="noteInput">
+            <textarea id="noteContent" placeholder="Введіть вашу нотатку тут..." rows="4" cols="50"></textarea>
+        </div>
+    </div>
+</div>
+
+<style>
+    #noteContainer {
+        position: fixed;
+        bottom: 50px;
+        right: 250px;
+        z-index: 1000;
+    }
+
+    #noteInput {
+        margin-top: 10px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease, visibility 0.5s;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        width: 200px;
+        height: 150px;
+    }
+
+    #noteContent {
+        width: 100%;
+        height: 150px;
+        border: none;
+        resize: none;
+    }
+
+    /* Floating Button Styling */
+    .floating-button {
+        position: fixed;
+        bottom: 50px;
+        right: 250px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 1001;
+        animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<script>
+    document.getElementById("showNoteInput").onclick = function () {
+        var x = document.getElementById("noteInput");
+        if (x.style.opacity === "1") {
+            x.style.opacity = "0";
+            x.style.visibility = "hidden";
+        } else {
+            x.style.opacity = "1";
+            x.style.visibility = "visible";
+        }
+    };
+
+    document.getElementById("noteContent").oninput = function () {
+        localStorage.setItem("noteContent", this.value);
+    };
+
+    window.onload = function () {
+        var savedNote = localStorage.getItem("noteContent");
+        if (savedNote) {
+            document.getElementById("noteContent").value = savedNote;
+        }
+        // Проверяем видимость поля ввода при загрузке страницы и корректируем его состояние
+        var noteInputVisibility = localStorage.getItem("noteInputVisibility");
+        if (noteInputVisibility === "visible") {
+            document.getElementById("noteInput").style.opacity = "1";
+            document.getElementById("noteInput").style.visibility = "visible";
+        }
+    };
+
+    // Сохраняем состояние видимости поля ввода
+    document.getElementById("showNoteInput").addEventListener("click", function () {
+        var visibility = document.getElementById("noteInput").style.visibility;
+        localStorage.setItem("noteInputVisibility", visibility);
+    });
+</script>

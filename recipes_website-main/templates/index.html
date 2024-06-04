@@ -1,0 +1,37 @@
+{% include 'upper_part.html' %}
+{% include 'cart.html' %}
+{% load static %}
+{% block content %}
+    <div class="container py-5">
+        <h2 class="text-center mb-4">Рецепти</h2>
+        <div class="row">
+            {% for recipe in recipes %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 recipe-card">
+                        {% if recipe.image %}
+                            <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}">
+                        {% else %}
+                            <div class="recipe-image-placeholder">
+                                <span>Немає зображення</span>
+                            </div>
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title"><a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.title }}</a>
+                            </h5>
+                            <p class="card-text">{{ recipe.description|truncatechars:150 }}</p>
+                            <p class="text-muted"><small>Дата публикації: {{ recipe.created_date|date:"d M Y" }}</small>
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            Автор: <a href="{% url 'profile' recipe.user.username %}">{{ recipe.user.username }}</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <p>Рецептів поки немає.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

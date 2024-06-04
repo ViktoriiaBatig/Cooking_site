@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row d-flex align-items-center justify-content-center">
+            <div style="max-width:420px;">
+                <form method="post" enctype="multipart/form-data" class="bg-white border py-4 px-5">
+                    {% csrf_token %}
+                    <div class="text-center mb-3">
+                        <a href="{% url 'home' %}">
+                            <img src="https://assets.materialup.com/uploads/d2feb47f-3d3c-4b05-8673-a2886e5f6aca/preview" alt="Logo" width="70" class="d-inline-block align-text-top mb-2">
+                        </a>
+                        <p class="text-muted fw-bold mt-2">Додайте ваш рецепт</p>
+                    </div>
+                    {% for field in form %}
+                        <div class="mb-2">
+                            {{ field.label_tag }}
+                            {% if field.is_hidden %}
+                                {{ field }}
+                            {% else %}
+                                <div class="form-floating">
+                                    {{ field }}
+                                    <label for="{{ field.id_for_label }}">{{ field.help_text }}</label>
+                                </div>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="alert alert-danger">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <div class="mb-2">
+                        <button class="btn btn-dark bg-gradient fw-bold w-100 bg-gradient" type="submit">Додати</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

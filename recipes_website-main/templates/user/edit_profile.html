@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row d-flex align-items-center justify-content-center">
+            <div style="max-width:420px;">
+                <form action="{% url 'edit_profile' %}" class="bg-white border py-4 px-5" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="text-center mb-3">
+                        {% if user.profile_picture and user.profile_picture.url %}
+                            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" width="100">
+                        {% else %}
+                            <img src="{% static 'no_image.png' %}" alt="Default Avatar" class="img-fluid rounded-circle mb-3" width="100">
+                        {% endif %}
+                        <h2>Зміна профілю</h2>
+                    </div>
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label for="id_avatar">Аватарка:</label>
+                        {{ form.profile_picture }}
+                        {% if form.profile_picture.errors %}
+                            <div class="alert alert-danger">{{ form.profile_picture.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_username">Ім'я користувача:</label>
+                        <input type="text" name="username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" id="id_username" placeholder="Логін" required value="{{ form.username.value|default_if_none:'' }}">
+                        {% for error in form.username.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_email">Електронна пошта:</label>
+                        <input type="email" name="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="id_email" placeholder="Електронна пошта" required value="{{ form.email.value|default_if_none:'' }}">
+                        {% for error in form.email.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_bio">Опис:</label>
+                        <textarea name="bio" id="id_bio" class="form-control {% if form.bio.errors %}is-invalid{% endif %}" rows="3">{{ form.bio.value|default_if_none:'' }}</textarea>
+                        {% for error in form.bio.errors %}
+                            <div class="alert alert-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_instagram_url"><i class="fab fa-instagram fa-lg me-2" style="color: #ac2bac;"></i>Instagram:</label>
+                        <input type="text" name="instagram_url" class="form-control {% if form.instagram_url.errors %}is-invalid{% endif %}" id="id_instagram_url" placeholder="Instagram URL" value="{{ form.instagram_url.value|default_if_none:'' }}">
+                        {% for error in form.instagram_url.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_telegram_url"><i class="fab fa-telegram fa-lg me-2" style="color: #55acee;"></i>Telegram:</label>
+                        <input type="text" name="telegram_url" class="form-control {% if form.telegram_url.errors %}is-invalid{% endif %}" id="id_telegram_url" placeholder="Telegram Url" value="{{ form.telegram_url.value|default_if_none:'' }}">
+                        {% for error in form.telegram_url.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-2">
+                        <button class="btn btn-dark bg-gradient fw-bold w-100 bg-gradient" type="submit">Зберегти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

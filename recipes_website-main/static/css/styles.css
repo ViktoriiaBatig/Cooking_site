@@ -1,0 +1,196 @@
+.profile-section {
+    display: flex;
+    align-items: center; /* Выравниваем элементы по центру по вертикали */
+}
+
+.avatar {
+    margin-top: 25px;
+    width: 140px;
+    height: 140px;
+    position: relative; /* Убрано центрирование */
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.edit-profile {
+    display: block;
+    width: fit-content;
+    /* Убрано центрирование, добавлено свойство для отступа слева */
+}
+
+
+.icon-container {
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.icon-container i {
+    margin-left: 0.5rem;
+}
+
+.notes-field {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.show {
+    display: block;
+}
+
+.search-bar .form-control {
+    width: 300px; /* или любая другая ширина, которая вам подходит */
+}
+
+.custom-nav-link {
+    font-size: 1.2rem; /* Делаем текст жирным */
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem; /* Увеличиваем размер шрифта для названия */
+}
+
+.navbar-brand img {
+    width: 40px; /* Увеличиваем ширину логотипа */
+    height: 40px; /* Увеличиваем высоту логотипа */
+    margin-right: 12px; /* Добавляем отступ справа от логотипа */
+}
+
+.user-avatar {
+    width: 50px; /* или любой другой желаемый размер */
+    height: 50px; /* делаем изображение квадратным для круглой формы */
+    border-radius: 50%; /* круглая форма */
+    border: 1px solid black; /* белая рамка, измените цвет при необходимости */
+    object-fit: cover; /* обрезка изображения для сохранения пропорций */
+    margin-right: 12px;
+}
+
+.recipe-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-img-top {
+    min-height: 200px; /* Установите минимальную высоту для изображений */
+}
+
+.recipe-image-placeholder {
+    background-color: #f0f0f0; /* Светло-серый фон для заглушки */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px; /* Та же минимальная высота, что и для изображений */
+    color: #666; /* Цвет текста */
+    font-size: 20px; /* Размер шрифта */
+}
+
+.recipe-profile-image-placeholder {
+    background-color: #f0f0f0; /* Светло-серый фон для заглушки */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px; /* Та же минимальная высота, что и для изображений */
+    color: #666; /* Цвет текста */
+    font-size: 15px; /* Размер шрифта */
+}
+
+
+.card-body {
+    flex-grow: 1;
+}
+
+.recipe-image {
+    height: 200px; /* Фиксированная высота для изображения */
+    object-fit: cover; /* Обрезает изображение, сохраняя его пропорции */
+}
+
+.card-title {
+    flex-grow: 1; /* Позволяет заголовку растягиваться для заполнения пространства */
+}
+
+.stats-container-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Выравнивание элементов внутри по левому краю */
+}
+
+.stats-container-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Выравнивание по центру для содержимого */
+}
+
+.social-link-text {
+    font-size: 70%; /* Уменьшаем размер текста */
+    display: block; /* Ссылки отображаются каждая на новой строке */
+    text-decoration: none; /* Убираем подчеркивание текста ссылки */
+    color: inherit; /* Цвет текста наследуется от родительского элемента */
+    margin-top: 5%; /* Небольшой отступ сверху для разделения */
+}
+
+
+.video-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Для управления высотой карточки */
+}
+
+.video-card .card-img-top {
+    max-height: 200px; /* Максимальная высота изображения */
+    object-fit: cover; /* Обрезка изображения, чтобы оно покрывало всю доступную область */
+}
+
+.video-card .card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.video-card .card-body .card-title,
+.video-card .card-body .card-text {
+    flex-grow: 1;
+}
+
+.video-card .card-body a {
+    margin-top: auto; /* Выравнивание кнопки внизу */
+}
+
+.img-fluid {
+    border: 5px solid #ddd; /* Светлая рамка вокруг изображения */
+    box-shadow: 0 2px 4px rgba(0,0,0,.5); /* Тень для добавления глубины */
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* Соотношение сторон 16:9 */
+    height: 0;
+    overflow: hidden;
+    background: #000; /* Фоновый цвет для видео-контейнера */
+    margin-top: 20px; /* Отступ сверху */
+    border: 3px solid #ddd; /* Рамка вокруг видео */
+    box-shadow: 0 2px 4px rgba(0,0,0,.5); /* Тень для видео */
+}
+
+.video-wrapper video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
